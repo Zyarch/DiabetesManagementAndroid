@@ -10,8 +10,10 @@
 
 package com.sugarcubes.myglucose.urlconnections;
 
-import android.content.ContentResolver;
+import android.content.Context;
 import android.util.Log;
+
+import com.sugarcubes.myglucose.factories.TLSSocketFactory;
 
 import org.json.JSONObject;
 
@@ -34,21 +36,22 @@ import static com.sugarcubes.myglucose.activities.MainActivity.DEBUG;
 
 public class UrlConnection
 {
-	protected ContentResolver contentResolver;
 	private String LOG_TAG = getClass().getSimpleName();
-	private HttpURLConnection connection;
+	private HttpsURLConnection connection;
 	private URL               url;
+	private Context           context;
 
-	public UrlConnection( URL url )
+	public UrlConnection( URL url, Context context )
 	{
 		this.url = url;
+		this.context = context;
 
 	} // constructor
 
 
 	private void open() throws IOException
 	{
-		connection = (HttpURLConnection) url.openConnection();
+		connection = (HttpsURLConnection) url.openConnection();
 		setup();
 
 	} // open
@@ -56,20 +59,20 @@ public class UrlConnection
 
 	private void setup()
 	{
+		try
+		{
+			// https://blog.dev-area.net/2015/08/13/android-4-1-enable-tls-1-1-and-tls-1-2/
+			// Android Jelly Bean devices require TLS to be specified explicitly
+			TLSSocketFactory tls = new TLSSocketFactory( context );
+			HttpsURLConnection.setDefaultSSLSocketFactory( tls );
+			connection.setSSLSocketFactory( tls );
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+		}
 		connection.setReadTimeout( 15000 );
 		connection.setConnectTimeout( 15000 );
-		//		try
-		//		{
-		//			TLSSocketFactory tls = new TLSSocketFactory( context );
-		//			// https://blog.dev-area.net/2015/08/13/android-4-1-enable-tls-1-1-and-tls-1-2/
-		//			// Android Jelly Bean devices require TLS to be specified explicitly
-		//			HttpsURLConnection.setDefaultSSLSocketFactory( tls );
-		//			setSSLSocketFactory( tls );
-		//		}
-		//		catch( Exception e )
-		//		{
-		//			e.printStackTrace();
-		//		}
 		connection.setDoInput( true );
 		connection.setDoOutput( true );
 
@@ -123,6 +126,8 @@ public class UrlConnection
 				if( DEBUG ) Log.e( LOG_TAG, "Either no HTTP Response, or bad request..." );
 				responseStringBuilder = new StringBuilder();// At least instantiate the object
 			}
+
+			connection.disconnect();
 
 		}
 		catch( Exception e )
@@ -244,6 +249,5 @@ public class UrlConnection
 		return result.toString();
 
 	} // getPostDataString
-
 
 } // class

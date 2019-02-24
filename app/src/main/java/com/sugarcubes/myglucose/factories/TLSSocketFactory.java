@@ -3,6 +3,10 @@ package com.sugarcubes.myglucose.factories;
 
 import android.content.Context;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -19,8 +23,10 @@ public class TLSSocketFactory extends SSLSocketFactory
 {
 	private SSLSocketFactory internalSSLSocketFactory;
 
-	public TLSSocketFactory( Context context ) throws KeyManagementException, NoSuchAlgorithmException
+	public TLSSocketFactory( Context context ) throws KeyManagementException, NoSuchAlgorithmException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException
 	{
+
+		ProviderInstaller.installIfNeeded(context);
 		SSLContext trusted = SSLContext.getInstance( "TLS" );
 
 		trusted.init( null, null, null );

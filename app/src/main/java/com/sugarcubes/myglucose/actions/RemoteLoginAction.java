@@ -43,11 +43,11 @@ public class RemoteLoginAction implements ILoginAction
 
 		final WebClientConnectionSingleton connection =
 				WebClientConnectionSingleton.getInstance( context );
-		final String jsonResponse = connection.sendLoginRequest( values );
+		final String stringResponse = connection.sendLoginRequest( values );
 
-		if( DEBUG ) Log.e( LOG_TAG, "Login returned: " + jsonResponse );
+		if( DEBUG ) Log.e( LOG_TAG, "Login returned: " + stringResponse );
 
-		JSONObject jsonObject = new JSONObject( jsonResponse );
+		JSONObject jsonObject = new JSONObject( stringResponse );
 
 		ErrorCode errorCode = ErrorCode.interpretErrorCode( jsonObject );
 		if( errorCode != ErrorCode.NO_ERROR ) return errorCode;
@@ -55,7 +55,7 @@ public class RemoteLoginAction implements ILoginAction
 		// Login was successful, so enter into the db:
 		DbPatientRepository patientRepository = new DbPatientRepository( context );
 		patientSingleton.setLoggedIn( true );
-		PatientSingleton.copyFrom( jsonResponse );          // Set patient's values from server
+		PatientSingleton.copyFrom( stringResponse );          // Set patient's values from server
 		patientRepository.create( patientSingleton );       // ...and insert into db
 
 		return ErrorCode.NO_ERROR;

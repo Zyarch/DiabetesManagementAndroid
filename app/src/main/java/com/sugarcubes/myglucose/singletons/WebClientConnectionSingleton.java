@@ -41,6 +41,8 @@ public class WebClientConnectionSingleton
 	private static String            host;
 	private static int               port;
 
+	private final static String PROTOCOL                 = "https://";
+
 	private final static String LOGIN_STRING             = "/API/AccountApi/Login";
 	private final static String REGISTER_STRING          = "/API/AccountApi/Register";
 	private final static String SYNC_GLUCOSE_STRING      = "/API/Glucose/Sync";
@@ -183,32 +185,33 @@ public class WebClientConnectionSingleton
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 		host = sharedPreferences.getString( SettingsActivity.PREF_HOSTNAME, "localhost" );
 		port = Integer.parseInt(
-				sharedPreferences.getString( SettingsActivity.PREF_PORT, "8080" ) );
+				sharedPreferences.getString( SettingsActivity.PREF_PORT, "8080" )
+		);
 
 		// Instantiate all of the connections to the server that the app will use:
-		String urlString = "http://" + host + ":" + port + LOGIN_STRING;
-		loginConnection = new UrlConnection( new URL( urlString ) );
+		String urlString = PROTOCOL + host + ":" + port + LOGIN_STRING;
+		loginConnection = new UrlConnection( new URL( urlString ), context );
 
-		urlString = "http://" + host + ":" + port + REGISTER_STRING;
-		registerConnection = new UrlConnection( new URL( urlString ) );
+		urlString = PROTOCOL + host + ":" + port + REGISTER_STRING;
+		registerConnection = new UrlConnection( new URL( urlString ), context );
 
-		urlString = "http://" + host + ":" + port + SYNC_GLUCOSE_STRING;
-		syncGlucoseConnection = new UrlConnection( new URL( urlString ) );
+		urlString = PROTOCOL + host + ":" + port + SYNC_GLUCOSE_STRING;
+		syncGlucoseConnection = new UrlConnection( new URL( urlString ), context );
 
-		urlString = "http://" + host + ":" + port + SYNC_MEAL_ENTRY_STRING;
-		syncMealEntryConnection = new UrlConnection( new URL( urlString ) );
+		urlString = PROTOCOL + host + ":" + port + SYNC_MEAL_ENTRY_STRING;
+		syncMealEntryConnection = new UrlConnection( new URL( urlString ), context );
 
-		urlString = "http://" + host + ":" + port + SYNC_MEAL_ITEM_STRING;
-		syncMealItemConnection = new UrlConnection( new URL( urlString ) );
+		urlString = PROTOCOL + host + ":" + port + SYNC_MEAL_ITEM_STRING;
+		syncMealItemConnection = new UrlConnection( new URL( urlString ), context );
 
-		urlString = "http://" + host + ":" + port + SYNC_EXERCISE_STRING;
-		syncExerciseConnection = new UrlConnection( new URL( urlString ) );
+		urlString = PROTOCOL + host + ":" + port + SYNC_EXERCISE_STRING;
+		syncExerciseConnection = new UrlConnection( new URL( urlString ), context );
 
-		urlString = "http://" + host + ":" + port + RETRIEVE_DOCTORS_STRING;
-		retrieveDoctorsConnection = new UrlConnection( new URL( urlString ) );
+		urlString = PROTOCOL + host + ":" + port + RETRIEVE_DOCTORS_STRING;
+		retrieveDoctorsConnection = new UrlConnection( new URL( urlString ), context );
 
-		urlString = "http://" + host + ":" + port + SYNC_PATIENT_DATA_STRING;
-		syncPatientDataConnection = new UrlConnection( new URL( urlString ) );
+		urlString = PROTOCOL + host + ":" + port + SYNC_PATIENT_DATA_STRING;
+		syncPatientDataConnection = new UrlConnection( new URL( urlString ), context );
 
 	} // reset
 
