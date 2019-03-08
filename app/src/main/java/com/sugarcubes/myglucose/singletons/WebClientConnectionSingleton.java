@@ -17,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.sugarcubes.myglucose.activities.SettingsActivity;
-import com.sugarcubes.myglucose.db.DB;
 import com.sugarcubes.myglucose.urlconnections.UrlConnection;
 
 import org.json.JSONObject;
@@ -40,8 +39,8 @@ public class WebClientConnectionSingleton
 	private static SharedPreferences sharedPreferences;
 	private static String            host;
 	private static int               port;
-
-	private final static String PROTOCOL                 = "https://";
+	private static String            protocol;
+	private static boolean use_ssl = true;
 
 	private final static String LOGIN_STRING             = "/API/AccountApi/Login";
 	private final static String REGISTER_STRING          = "/API/AccountApi/Register";
@@ -78,6 +77,8 @@ public class WebClientConnectionSingleton
 
 		// Create the client *only* if it hasn't been created, the host or port has changed
 		if( webClientConnection == null
+				|| use_ssl != sharedPreferences.getBoolean(
+				SettingsActivity.PREF_USE_SSL, true )
 				|| !host.equals( sharedPreferences.getString(
 				SettingsActivity.PREF_HOSTNAME, "localhost" ) )
 				|| port != Integer.parseInt(
@@ -109,6 +110,50 @@ public class WebClientConnectionSingleton
 		return netInfo != null && netInfo.isConnected();
 
 	} // networkIsAvailable
+
+
+	public void reset() throws MalformedURLException
+	{
+		if( DEBUG ) Log.e( LOG_TAG, "Web connection reset!" );
+
+		// We first get our user's preferences
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+		host = sharedPreferences.getString( SettingsActivity.PREF_HOSTNAME, "localhost" );
+		port = Integer.parseInt(
+				sharedPreferences.getString( SettingsActivity.PREF_PORT, "8080" )
+		);
+		use_ssl = sharedPreferences.getBoolean( SettingsActivity.PREF_USE_SSL, true );
+
+		protocol = use_ssl
+				? "https://"
+				: "http://";
+
+		// Instantiate all of the connections to the server that the app will use:
+		String urlString = protocol + host + ":" + port + LOGIN_STRING;
+		loginConnection = new UrlConnection( new URL( urlString ), context );
+
+		urlString = protocol + host + ":" + port + REGISTER_STRING;
+		registerConnection = new UrlConnection( new URL( urlString ), context );
+
+		urlString = protocol + host + ":" + port + SYNC_GLUCOSE_STRING;
+		syncGlucoseConnection = new UrlConnection( new URL( urlString ), context );
+
+		urlString = protocol + host + ":" + port + SYNC_MEAL_ENTRY_STRING;
+		syncMealEntryConnection = new UrlConnection( new URL( urlString ), context );
+
+		urlString = protocol + host + ":" + port + SYNC_MEAL_ITEM_STRING;
+		syncMealItemConnection = new UrlConnection( new URL( urlString ), context );
+
+		urlString = protocol + host + ":" + port + SYNC_EXERCISE_STRING;
+		syncExerciseConnection = new UrlConnection( new URL( urlString ), context );
+
+		urlString = protocol + host + ":" + port + RETRIEVE_DOCTORS_STRING;
+		retrieveDoctorsConnection = new UrlConnection( new URL( urlString ), context );
+
+		urlString = protocol + host + ":" + port + SYNC_PATIENT_DATA_STRING;
+		syncPatientDataConnection = new UrlConnection( new URL( urlString ), context );
+
+	} // reset
 
 
 	public String sendLoginRequest( HashMap<String, String> values )
@@ -175,44 +220,5 @@ public class WebClientConnectionSingleton
 		return retrieveDoctorsConnection.performRequest( values );
 
 	} // sendSyncExerciseRequest
-
-
-	public void reset() throws MalformedURLException
-	{
-		if( DEBUG ) Log.e( LOG_TAG, "Web connection reset!" );
-
-		// We first get our user's preferences
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-		host = sharedPreferences.getString( SettingsActivity.PREF_HOSTNAME, "localhost" );
-		port = Integer.parseInt(
-				sharedPreferences.getString( SettingsActivity.PREF_PORT, "8080" )
-		);
-
-		// Instantiate all of the connections to the server that the app will use:
-		String urlString = PROTOCOL + host + ":" + port + LOGIN_STRING;
-		loginConnection = new UrlConnection( new URL( urlString ), context );
-
-		urlString = PROTOCOL + host + ":" + port + REGISTER_STRING;
-		registerConnection = new UrlConnection( new URL( urlString ), context );
-
-		urlString = PROTOCOL + host + ":" + port + SYNC_GLUCOSE_STRING;
-		syncGlucoseConnection = new UrlConnection( new URL( urlString ), context );
-
-		urlString = PROTOCOL + host + ":" + port + SYNC_MEAL_ENTRY_STRING;
-		syncMealEntryConnection = new UrlConnection( new URL( urlString ), context );
-
-		urlString = PROTOCOL + host + ":" + port + SYNC_MEAL_ITEM_STRING;
-		syncMealItemConnection = new UrlConnection( new URL( urlString ), context );
-
-		urlString = PROTOCOL + host + ":" + port + SYNC_EXERCISE_STRING;
-		syncExerciseConnection = new UrlConnection( new URL( urlString ), context );
-
-		urlString = PROTOCOL + host + ":" + port + RETRIEVE_DOCTORS_STRING;
-		retrieveDoctorsConnection = new UrlConnection( new URL( urlString ), context );
-
-		urlString = PROTOCOL + host + ":" + port + SYNC_PATIENT_DATA_STRING;
-		syncPatientDataConnection = new UrlConnection( new URL( urlString ), context );
-
-	} // reset
 
 } // class

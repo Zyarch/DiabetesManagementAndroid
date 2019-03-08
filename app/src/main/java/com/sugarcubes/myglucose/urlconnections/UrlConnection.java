@@ -11,8 +11,11 @@
 package com.sugarcubes.myglucose.urlconnections;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.sugarcubes.myglucose.activities.SettingsActivity;
 import com.sugarcubes.myglucose.factories.TLSSocketFactory;
 
 import org.json.JSONObject;
@@ -26,6 +29,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +41,12 @@ import static com.sugarcubes.myglucose.activities.MainActivity.DEBUG;
 public class UrlConnection
 {
 	private String LOG_TAG = getClass().getSimpleName();
-	private HttpsURLConnection connection;
-	private URL               url;
-	private Context           context;
+	private        HttpURLConnection connection;
+	//private HttpURLConnection connection;
+	private        URL               url;
+	private        Context           context;
+	private        boolean           use_ssl;
+	private static SharedPreferences sharedPreferences;
 
 	public UrlConnection( URL url, Context context )
 	{
@@ -51,7 +58,12 @@ public class UrlConnection
 
 	private void open() throws IOException
 	{
-		connection = (HttpsURLConnection) url.openConnection();
+		if( sharedPreferences == null )
+			sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+		use_ssl = sharedPreferences.getBoolean( SettingsActivity.PREF_USE_SSL, true );
+		connection = use_ssl
+				? (HttpsURLConnection) url.openConnection()
+				: (HttpURLConnection) url.openConnection();
 		setup();
 
 	} // open
@@ -65,7 +77,7 @@ public class UrlConnection
 			// Android Jelly Bean devices require TLS to be specified explicitly
 			TLSSocketFactory tls = new TLSSocketFactory( context );
 			HttpsURLConnection.setDefaultSSLSocketFactory( tls );
-			connection.setSSLSocketFactory( tls );
+			//connection.setSSLSocketFactory( tls );
 		}
 		catch( Exception e )
 		{
@@ -89,7 +101,8 @@ public class UrlConnection
 	public String performRequest( HashMap<String, String> postDataParams )
 	{
 		if( DEBUG && postDataParams != null )
-			Log.e( LOG_TAG, "performRequest parameters: " + postDataParams.toString() );
+			Log.e( LOG_TAG, "performRequest parameters: " + postDataParams.toString()
+					+ "; Sending request to: " + url.toString() );
 
 		StringBuilder responseStringBuilder = new StringBuilder();
 		try
@@ -123,7 +136,9 @@ public class UrlConnection
 			}
 			else
 			{
-				if( DEBUG ) Log.e( LOG_TAG, "Either no HTTP Response, or bad request..." );
+				Log.e( LOG_TAG, "Either no HTTP Response, or bad request... " +
+						"Response code: [" + responseCode + "]: "
+						+ connection.getResponseMessage() );
 				responseStringBuilder = new StringBuilder();// At least instantiate the object
 			}
 

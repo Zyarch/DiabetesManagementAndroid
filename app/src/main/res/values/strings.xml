@@ -238,4 +238,8 @@
     <string name="before_after">Before/After</string>
     <string name="date">Date</string>
     <string name="share_this">Share</string>
+    <string name="pref_title_use_ssl">Use SSL</string>
+    <string name="diabetes_preference_screen">diabetesPreferenceScreen</string>
+    <string name="dev_preferences">devPreferences</string>
+    <string name="glucose_label">Glucose Level</string>
 </resources>

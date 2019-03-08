@@ -41,9 +41,9 @@ public class RemoteLoginAction implements ILoginAction
 		if( DEBUG ) Log.i( LOG_TAG,
 				"Email: " + username + "; Password: " + password.substring( 0, 2 ) + "..." );
 
-		final WebClientConnectionSingleton connection =
+		WebClientConnectionSingleton connection =
 				WebClientConnectionSingleton.getInstance( context );
-		final String stringResponse = connection.sendLoginRequest( values );
+		String stringResponse = connection.sendLoginRequest( values );
 
 		if( DEBUG ) Log.e( LOG_TAG, "Login returned: " + stringResponse );
 

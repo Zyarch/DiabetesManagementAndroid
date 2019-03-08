@@ -25,7 +25,6 @@ public class TLSSocketFactory extends SSLSocketFactory
 
 	public TLSSocketFactory( Context context ) throws KeyManagementException, NoSuchAlgorithmException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException
 	{
-
 		ProviderInstaller.installIfNeeded(context);
 		SSLContext trusted = SSLContext.getInstance( "TLS" );
 

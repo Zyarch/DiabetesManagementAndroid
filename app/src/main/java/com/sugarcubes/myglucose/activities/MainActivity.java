@@ -55,6 +55,7 @@ import com.sugarcubes.myglucose.singletons.PatientSingleton;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 public class MainActivity
 		extends AppCompatActivity
@@ -62,9 +63,9 @@ public class MainActivity
 		View.OnTouchListener,
 		ServiceConnection
 {
-	public static final boolean DEBUG           = true;              // Activate/deactivate logging
-	public final static String  WEBSITE_ADDRESS = "www.legendscomic.com:22222";
-	//"www.myglucosetracker.com";
+	public static final boolean DEBUG = true;              // Activate/deactivate logging
+	public static  String            WEBSITE_ADDRESS;
+	private static SharedPreferences sharedPreferences;
 
 	private final       String           LOG_TAG                    = getClass().getSimpleName();
 	private final       String           STATE_TRACK_STEPS          = "trackSteps";
@@ -86,8 +87,8 @@ public class MainActivity
 	};
 	private static final int      INITIAL_REQUEST = 1337;
 
-	private final Messenger         mMessenger        = new Messenger(
-			new IncomingMessageHandler() );         // To communicate with Service
+	private final Messenger         mMessenger        =
+			new Messenger( new IncomingMessageHandler() );// To communicate with Service
 	private       boolean           pIsBound          = false;
 	private       boolean           trackSteps        = false;
 	private       boolean           showNotification  = false;
@@ -109,6 +110,17 @@ public class MainActivity
 
 		// Initialize loader to get user information:
 		getLoaderManager().initLoader( USER_LOADER, null, this );
+
+		if( sharedPreferences == null )
+			sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences( getApplicationContext() );
+
+		String protocol = sharedPreferences.getBoolean( SettingsActivity.PREF_USE_SSL, true )
+				? "https://"
+				: "http://";
+		WEBSITE_ADDRESS = protocol
+				+ sharedPreferences.getString( SettingsActivity.PREF_HOSTNAME, "" )
+				+ ":" + sharedPreferences.getString( SettingsActivity.PREF_PORT, "80" );
 
 		Button glucoseButton = findViewById( R.id.glucose_button );
 		Button mealsButton = findViewById( R.id.meals_button );

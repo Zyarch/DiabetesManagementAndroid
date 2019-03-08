@@ -13,6 +13,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -37,9 +38,7 @@ public class LogGlucoseActivity extends AppCompatActivity
 	private View                   spinner;                 // Shows when submitting
 	private View                   glucoseForm;             // The view to hide when submitting
 	private ILogGlucoseEntryAction logGlucoseEntryAction;   // The command to log the glucose
-	/*public TableLayout glucoseItemTable;    				// Holds the GlucoseItems on the screen
-	public ArrayList<TableRow> allTableRows;				// Holds all TableRows*/
-	private LogGlucoseTask mlogGlucoseTask = null;
+	private LogGlucoseTask mLogGlucoseTask = null;
 
 
 	@SuppressLint( "ClickableViewAccessibility" )
@@ -61,21 +60,22 @@ public class LogGlucoseActivity extends AppCompatActivity
 		// Return the correct LogGlucoseEntry action (set up in .dependencies.ObjectMap)
 		logGlucoseEntryAction = Dependencies.get( ILogGlucoseEntryAction.class );
 
-		Button button = findViewById( R.id.submitGlucose );
+		Button saveButton = findViewById( R.id.submitGlucose );
 		Button historyButton = findViewById( R.id.viewHistory );
 		Button viewLatest = findViewById( R.id.viewLatest );
 		spinner = findViewById( R.id.save_spinner );
 		glucoseForm = findViewById( R.id.glucose_form );
 
-		button.setOnTouchListener( new View.OnTouchListener()
+		// Set up the listener for saving the glucose level:
+		saveButton.setOnTouchListener( new View.OnTouchListener()
 		{
 			@Override
 			public boolean onTouch( View v, MotionEvent event )
 			{
 				if( event.getAction() == MotionEvent.ACTION_UP )
 				{
-					mlogGlucoseTask = new LogGlucoseTask();
-					mlogGlucoseTask.execute();
+					mLogGlucoseTask = new LogGlucoseTask();
+					mLogGlucoseTask.execute();
 
 					return true;
 				}
@@ -83,6 +83,7 @@ public class LogGlucoseActivity extends AppCompatActivity
 			}
 		} );
 
+		// Set up the glucose history listener:
 		historyButton.setOnTouchListener( new View.OnTouchListener()
 		{
 			@Override
@@ -90,7 +91,8 @@ public class LogGlucoseActivity extends AppCompatActivity
 			{
 				if( event.getAction() == MotionEvent.ACTION_UP )
 				{
-					Intent intent = new Intent( getApplicationContext(), ViewGlucoseHistoryActivity.class );
+					Intent intent =
+							new Intent( getApplicationContext(), ViewGlucoseHistoryActivity.class );
 					startActivity( intent );
 					return true;
 				}
@@ -98,6 +100,7 @@ public class LogGlucoseActivity extends AppCompatActivity
 			}
 		} );
 
+		// Set up the "view latest" button listener:
 		viewLatest.setOnTouchListener( new View.OnTouchListener()
 		{
 			@Override
@@ -115,6 +118,9 @@ public class LogGlucoseActivity extends AppCompatActivity
 	} // onCreate
 
 
+	/**
+	 * Starts the Activity to view the latest Glucose entry
+	 */
 	private void startViewLatestGlucoseActivity()
 	{
 		Intent intent = new Intent( this, ViewGlucoseEntryActivity.class );
@@ -122,10 +128,10 @@ public class LogGlucoseActivity extends AppCompatActivity
 
 	} // startEditProfileActivity
 
+
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
-
 	@TargetApi( Build.VERSION_CODES.HONEYCOMB_MR2 )
 	private void showProgress( final boolean show )
 	{
@@ -168,14 +174,15 @@ public class LogGlucoseActivity extends AppCompatActivity
 			}
 		} );
 
-	}
+	} // showProgress
+
 
 	/**
 	 * An AsyncTask used to log the glucose on a separate thread
 	 */
-	public class LogGlucoseTask extends AsyncTask<Void, Void, ErrorCode>
+	private class LogGlucoseTask extends AsyncTask<Void, Void, ErrorCode>
 	{
-		//		private static final String LOG_TAG = "LogGlucoseTask";
+		private static final String LOG_TAG = "LogGlucoseTask";
 
 		@Override
 		protected void onPreExecute()
@@ -215,50 +222,49 @@ public class LogGlucoseActivity extends AppCompatActivity
 			}
 			catch( Exception e )
 			{
-				e.printStackTrace();
+				Log.e( LOG_TAG, "Error submitting glucose level! Message: " + e.getMessage() );
 				return ErrorCode.UNKNOWN;
-			}
+
+			} // try/catch
 
 		} // doInBackground
-
 
 		@Override
 		protected void onPostExecute( final ErrorCode errorCode )
 		{
-			mlogGlucoseTask = null;
-			showProgress( false );
+			mLogGlucoseTask = null;
+			showProgress( false );                          // Hide the spinner
 
 			switch( errorCode )
 			{
-				case NO_ERROR:                                    // 0:	No error
-					Intent returnData = new Intent();
-					returnData.setData( Uri.parse( "glucose logged" ) );
-					setResult( RESULT_OK, returnData );            // Return ok result for activity result
-					finish();                                    // Close the activity
+				case NO_ERROR:                              // 0:	No error
+					Intent returnData = new Intent();       // Create a new intent
+					returnData.setData( Uri.parse( "glucose logged" ) ); // Return message
+					setResult( RESULT_OK, returnData );     // Return ok result for activity result
+					finish();                               // Close the activity
 					break;
 
-				case UNKNOWN:                                    // 1:	Unknown - something went wrong
+				case UNKNOWN:                               // 1:	Unknown - something went wrong
 					Snackbar.make( coordinatorLayout, "Unknown error", Snackbar.LENGTH_LONG ).show();
 					break;
 
-				default:
+				default:                                    // Return a general error
 					Snackbar.make( coordinatorLayout, "Error", Snackbar.LENGTH_LONG ).show();
 					break;
-			}
+
+			} // switch
 
 		} // onPostExecute
-
 
 		@Override
 		protected void onCancelled()
 		{
-			mlogGlucoseTask = null;
+			mLogGlucoseTask = null;
 			showProgress( false );
 
 		} // onCancelled
 
 	} // UserLoginTask
-
 
 } // class
 

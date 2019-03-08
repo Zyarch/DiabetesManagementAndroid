@@ -21,6 +21,9 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
+import android.preference.PreferenceScreen;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -29,6 +32,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.View;
 
 import com.sugarcubes.myglucose.R;
 import com.sugarcubes.myglucose.services.PedometerService;
@@ -54,6 +58,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 {
 	public static final String PREF_HOSTNAME          = "hostname";
 	public static final String PREF_PORT              = "port";
+	public static final String PREF_USE_SSL           = "protocol";
 	public static final String PREF_GLUCOSE_UNITS     = "glucose_units";
 	public static final String PREF_TRACK_STEPS       = "track_steps";
 	public static final String PREF_SHOW_NOTIFICATION = "show_notification";
@@ -101,6 +106,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 					.setOnPreferenceChangeListener( sBindPreferenceSummaryToValueListener );
 
 		} // onCreate
+
+
+		@Override
+		public void onViewCreated( View view, @Nullable Bundle savedInstanceState )
+		{
+			super.onViewCreated( view, savedInstanceState );
+
+			if( !DEBUG )
+			{
+				PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference(
+						getResources().getString(R.string.diabetes_preference_screen ));
+				PreferenceCategory devPreferences = (PreferenceCategory)
+						findPreference(getResources().getString(R.string.dev_preferences));
+				preferenceScreen.removePreference(devPreferences);
+			}
+
+		} // onViewCreated
 
 	} // PrefsFragment
 

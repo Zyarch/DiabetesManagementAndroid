@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="@string/diabetes_preference_screen">
 
     <!--<SwitchPreference-->
     <!--android:defaultValue="true"-->
@@ -33,7 +34,13 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/developer_settings">
+    <PreferenceCategory android:title="@string/developer_settings"
+        android:key="@string/dev_preferences">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="protocol"
+            android:title="@string/pref_title_use_ssl" />
 
         <!-- NOTE: EditTextPreference accepts EditText attributes. -->
         <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
