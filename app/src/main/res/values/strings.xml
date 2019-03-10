@@ -242,4 +242,5 @@
     <string name="diabetes_preference_screen">diabetesPreferenceScreen</string>
     <string name="dev_preferences">devPreferences</string>
     <string name="glucose_label">Glucose Level</string>
+    <string name="your_profile">Your Profile</string>
 </resources>

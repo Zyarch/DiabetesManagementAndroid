@@ -41,80 +41,116 @@
             android:layout_marginBottom="8dp"
             android:visibility="gone" />
 
-        <LinearLayout
+        <TableLayout
             android:id="@+id/glucose_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/fab_margin">
+            android:gravity="center_vertical"
+            android:padding="32dp"
+            android:stretchColumns="1"
+            android:layout_weight="2">
 
-            <EditText
-                android:id="@+id/glucoseLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
-                android:layout_marginTop="54dp"
-                android:hint="@string/glucose_level"
-                android:inputType="number" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/when_was_your_meal" />
+                <TextView
+                    android:id="@+id/glucoseLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    android:text="@string/glucose_label" />
 
-            <Spinner
-                android:id="@+id/whichMeal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:entries="@array/whichMeal" />
+                <EditText
+                    android:id="@+id/glucoseLevel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_weight="1"
+                    android:hint="@string/glucose_level"
+                    android:inputType="number" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:maxWidth="220dp"
-                android:text="@string/did_you_record_your_glucose_before_or_after" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp">
 
-            <Spinner
-                android:id="@+id/beforeAfter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:entries="@array/beforeAfter" />
+                <TextView
+                    android:id="@+id/beforeAfterLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    android:maxWidth="200dp"
+                    android:text="@string/did_you_record_your_glucose_before_or_after" />
 
-            <Button
-                android:id="@+id/submitGlucose"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="48dp"
-                android:layout_marginTop="12dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:background="@android:color/holo_green_light"
-                android:text="@string/submit"
-                android:layout_marginRight="48dp" />
-            <!--android:drawableRight="@drawable/ic_save_white_24dp"-->
-            <!--android:drawableEnd="@drawable/ic_save_white_24dp"-->
+                <Spinner
+                    android:id="@+id/beforeAfter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_weight="1"
+                    android:entries="@array/beforeAfter" />
+            </TableRow>
 
-        </LinearLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp">
 
+                <TextView
+                    android:id="@+id/whichMealLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    android:text="@string/when_was_your_meal" />
+
+                <Spinner
+                    android:id="@+id/whichMeal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_weight="1"
+                    android:entries="@array/whichMeal" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="32dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/submitGlucose"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/holo_green_light"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="@string/submit" />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+        <!--android:drawableEnd="@drawable/ic_save_white_24dp"-->
+        <!--android:drawableRight="@drawable/ic_save_white_24dp"-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:gravity="bottom|center_horizontal"
-            android:layout_weight="1"
             android:layout_margin="12dp"
+            android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
             android:orientation="horizontal">
 
             <Button
