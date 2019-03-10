@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -46,7 +45,7 @@ import static com.sugarcubes.myglucose.activities.MainActivity.DEBUG;
 public class LogMealActivity extends AppCompatActivity implements View.OnTouchListener
 {
 	private final String LOG_TAG = getClass().getSimpleName();
-	private CoordinatorLayout   coordinatorLayout;          // The base view (for using Snackbar)
+	private View                container;                  // The base view (for using Snackbar)
 	private View                spinner;                    // Shows when submitting
 	private View                mealForm;                   // The view to hide when submitting
 	private Spinner             whichMeal;                  // To select a meal type
@@ -76,7 +75,7 @@ public class LogMealActivity extends AppCompatActivity implements View.OnTouchLi
 		if( getSupportActionBar() != null )
 			getSupportActionBar().setDisplayHomeAsUpEnabled( true );
 
-		coordinatorLayout = findViewById( R.id.coordinator_layout );
+		container = findViewById( R.id.top );
 
 		// Dependency Injection:
 		logMealEntryAction = Dependencies.get( ILogMealEntryAction.class );
@@ -90,8 +89,8 @@ public class LogMealActivity extends AppCompatActivity implements View.OnTouchLi
 		Button addButton = findViewById( R.id.add_meal_item_button );
 		addButton.setOnTouchListener( this );
 
-		Button mHistoryButton = findViewById(R.id.button_view_history);
-        mHistoryButton.setOnTouchListener(this);
+		Button mHistoryButton = findViewById( R.id.button_view_history );
+		mHistoryButton.setOnTouchListener( this );
 
 		spinner = findViewById( R.id.save_spinner );
 		mealForm = findViewById( R.id.meal_form );
@@ -118,10 +117,10 @@ public class LogMealActivity extends AppCompatActivity implements View.OnTouchLi
 	@Override
 	public boolean onTouch( View view, MotionEvent event )
 	{
-		view.performClick();                                    // Perform default action
+		view.performClick();                                // Perform default action
 		//Log.i( LOG_TAG, "Touch detected: " + view.getId() );
 
-		if( event.getAction() == MotionEvent.ACTION_UP )        // Only handle single event
+		if( event.getAction() == MotionEvent.ACTION_UP )    // Only handle single event
 		{
 			switch( view.getId() )
 			{
@@ -136,8 +135,8 @@ public class LogMealActivity extends AppCompatActivity implements View.OnTouchLi
 				case R.id.button_save:
 					// Create the MealEntry using the MealItems:
 					MealEntry mealEntry =
-							getMealEntryFromInputData();        // Get the data from EditTexts
-					if( mealEntry != null )                     // Null if all fields not valid
+							getMealEntryFromInputData();    // Get the data from EditTexts
+					if( mealEntry != null )                 // Null if all fields not valid
 					{
 						mAuthTask = new LogMealTask( mealEntry );   // Save it to the database
 						mAuthTask.execute();
@@ -146,13 +145,13 @@ public class LogMealActivity extends AppCompatActivity implements View.OnTouchLi
 					break;
 
 				case R.id.add_meal_item_button:
-					TableRow newRow = createTableRow();         // Adds correct views to a new row
-					mealItemTable.addView( newRow );            // Add the row to the layout
+					TableRow newRow = createTableRow();     // Adds correct views to a new row
+					mealItemTable.addView( newRow );        // Add the row to the layout
 					break;
 
 				case R.id.remove_meal_item_button:
-					removeParentTableRow( view );               // Remove row containing the button
-					resetTags();                                // To allow indexing/performing actions
+					removeParentTableRow( view );           // Remove row containing the button
+					resetTags();                            // To allow indexing/performing actions
 					break;
 
 			} // switch
@@ -224,8 +223,10 @@ public class LogMealActivity extends AppCompatActivity implements View.OnTouchLi
 	@NonNull
 	private EditText createEditText( int meal_item_name, int inputType )
 	{
-		EditText editText =
-				new EditText( new ContextThemeWrapper( this, R.style.EditTextCustomHolo ), null, 0 );
+		EditText editText = new EditText(
+				new ContextThemeWrapper( this, R.style.EditTextCustomHolo ),
+				null, 0
+		);
 		int margin = (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP,
 				8, getResources().getDisplayMetrics() );
 		TableRow.LayoutParams lp = new TableRow.LayoutParams(
@@ -553,20 +554,20 @@ public class LogMealActivity extends AppCompatActivity implements View.OnTouchLi
 
 			switch( errorCode )
 			{
-				case NO_ERROR:                                   // 0: No error
+				case NO_ERROR:                               // 0: No error
 					Intent returnData = new Intent();
 					returnData.setData( Uri.parse( "meal logged" ) );
-					setResult( RESULT_OK, returnData );          // Return ok result for activity result
-					finish();                                    // Close the activity
+					setResult( RESULT_OK, returnData );      // Return ok result for activity result
+					finish();                                // Close the activity
 					break;
 
-				case UNKNOWN:                                    // 1: Unknown - something went wrong
-					Snackbar.make( coordinatorLayout, "Unknown error", Snackbar.LENGTH_LONG )
+				case UNKNOWN:                                // 1: Unknown - something went wrong
+					Snackbar.make( container, "Unknown error", Snackbar.LENGTH_LONG )
 							.show();
 					break;
 
 				default:
-					Snackbar.make( coordinatorLayout, "Error", Snackbar.LENGTH_LONG ).show();
+					Snackbar.make( container, "Error", Snackbar.LENGTH_LONG ).show();
 					break;
 			}
 

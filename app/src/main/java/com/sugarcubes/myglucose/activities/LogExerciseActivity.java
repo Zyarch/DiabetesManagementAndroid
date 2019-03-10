@@ -9,13 +9,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.sugarcubes.myglucose.R;
 import com.sugarcubes.myglucose.actions.interfaces.ILogExerciseEntryAction;
@@ -30,12 +30,10 @@ import java.util.Date;
 public class LogExerciseActivity extends AppCompatActivity
 {
 	private final String LOG_TAG = getClass().getSimpleName();
-	ConstraintLayout constraintLayout;                    // The base view (for using Snackbar)
-	private View                    spinner;                 // Shows when submitting
-	private View                    exerciseForm;             // The view to hide when submitting
-	private ILogExerciseEntryAction logExerciseEntryAction;   // The command to log the exercise
-	/*public TableLayout exerciseItemTable;    				// Holds the ExerciseItems on the screen
-	public ArrayList<TableRow> allTableRows;				// Holds all TableRows*/
+	View container;                                         // The base view (for using Snackbar)
+	private View                    spinner;                // Shows when submitting
+	private View                    exerciseForm;           // The view to hide when submitting
+	private ILogExerciseEntryAction logExerciseEntryAction; // The command to log the exercise
 	private LogExerciseTask mlogExerciseTask = null;
 
 
@@ -58,7 +56,7 @@ public class LogExerciseActivity extends AppCompatActivity
 
 		spinner = findViewById( R.id.save_spinner );
 		exerciseForm = findViewById( R.id.exercise_form );
-		constraintLayout = findViewById( R.id.contraint_layout );
+		container = findViewById( R.id.top );
 
 		Button saveButton = findViewById( R.id.submitButton );
 		saveButton.setOnTouchListener( new View.OnTouchListener()
@@ -202,7 +200,10 @@ public class LogExerciseActivity extends AppCompatActivity
 				PatientSingleton patient = PatientSingleton.getInstance();
 				exerciseEntry.setUserName( patient.getUserName() );
 				// Save the ExerciseEntry and its ExerciseItems
-				return logExerciseEntryAction.logExerciseEntry( getApplicationContext(), exerciseEntry );
+				return logExerciseEntryAction.logExerciseEntry(
+						getApplicationContext(),
+						exerciseEntry
+				);
 
 			}
 			catch( Exception e )
@@ -222,19 +223,19 @@ public class LogExerciseActivity extends AppCompatActivity
 
 			switch( errorCode )
 			{
-				case NO_ERROR:                                    // 0:	No error
+				case NO_ERROR:                               // 0:	No error
 					Intent returnData = new Intent();
 					returnData.setData( Uri.parse( "exercise logged" ) );
-					setResult( RESULT_OK, returnData );            // Return ok result for activity result
-					finish();                                    // Close the activity
+					setResult( RESULT_OK, returnData );      // Return ok result for activity result
+					finish();                                // Close the activity
 					break;
 
-				case UNKNOWN:                                    // 1:	Unknown - something went wrong
-					Snackbar.make( constraintLayout, "Unknown error", Snackbar.LENGTH_LONG ).show();
+				case UNKNOWN:                                // 1:	Unknown - something went wrong
+					Snackbar.make( container, "Unknown error", Snackbar.LENGTH_LONG ).show();
 					break;
 
 				default:
-					Snackbar.make( constraintLayout, "Error", Snackbar.LENGTH_LONG ).show();
+					Snackbar.make( container, "Error", Snackbar.LENGTH_LONG ).show();
 					break;
 			}
 

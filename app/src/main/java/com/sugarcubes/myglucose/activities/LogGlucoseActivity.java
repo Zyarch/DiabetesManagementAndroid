@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,7 +33,7 @@ import java.util.Date;
 public class LogGlucoseActivity extends AppCompatActivity
 {
 	private final String LOG_TAG = getClass().getSimpleName();
-	CoordinatorLayout coordinatorLayout;                    // The base view (for using Snackbar)
+	private View                   container;               // The base view (for using Snackbar)
 	private View                   spinner;                 // Shows when submitting
 	private View                   glucoseForm;             // The view to hide when submitting
 	private ILogGlucoseEntryAction logGlucoseEntryAction;   // The command to log the glucose
@@ -65,6 +64,7 @@ public class LogGlucoseActivity extends AppCompatActivity
 		Button viewLatest = findViewById( R.id.viewLatest );
 		spinner = findViewById( R.id.save_spinner );
 		glucoseForm = findViewById( R.id.glucose_form );
+		container = findViewById( R.id.top );
 
 		// Set up the listener for saving the glucose level:
 		saveButton.setOnTouchListener( new View.OnTouchListener()
@@ -203,12 +203,16 @@ public class LogGlucoseActivity extends AppCompatActivity
 				Spinner whichMeal = findViewById( R.id.whichMeal );
 				Spinner beforeAfter = findViewById( R.id.beforeAfter );
 
-				glucoseEntry.setMeasurement( Float.parseFloat( glucoseLevel.getText().toString() ) );
+				glucoseEntry.setMeasurement(
+						Float.parseFloat( glucoseLevel.getText().toString() )
+				);
 				WhichMeal whichMealEnum =
 						WhichMeal.valueOf( whichMeal.getSelectedItem().toString().toUpperCase() );
 				glucoseEntry.setWhichMeal( whichMealEnum );
 				BeforeAfter beforeAfterEnum =
-						BeforeAfter.valueOf( beforeAfter.getSelectedItem().toString().toUpperCase() );
+						BeforeAfter.valueOf(
+								beforeAfter.getSelectedItem().toString().toUpperCase()
+						);
 				glucoseEntry.setBeforeAfter( beforeAfterEnum );
 
 				Date date = new Date();
@@ -217,7 +221,9 @@ public class LogGlucoseActivity extends AppCompatActivity
 				PatientSingleton patient = PatientSingleton.getInstance();
 				glucoseEntry.setUserName( patient.getUserName() );
 				// Save the GlucoseEntry and its GlucoseItems
-				return logGlucoseEntryAction.logGlucoseEntry( getApplicationContext(), glucoseEntry );
+				return logGlucoseEntryAction.logGlucoseEntry(
+						getApplicationContext(), glucoseEntry
+				);
 
 			}
 			catch( Exception e )
@@ -245,11 +251,11 @@ public class LogGlucoseActivity extends AppCompatActivity
 					break;
 
 				case UNKNOWN:                               // 1:	Unknown - something went wrong
-					Snackbar.make( coordinatorLayout, "Unknown error", Snackbar.LENGTH_LONG ).show();
+					Snackbar.make( container, "Unknown error", Snackbar.LENGTH_LONG ).show();
 					break;
 
 				default:                                    // Return a general error
-					Snackbar.make( coordinatorLayout, "Error", Snackbar.LENGTH_LONG ).show();
+					Snackbar.make( container, "Error", Snackbar.LENGTH_LONG ).show();
 					break;
 
 			} // switch
