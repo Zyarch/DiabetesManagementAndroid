@@ -7,4 +7,11 @@
     <color name="background">#ffffff</color>
     <color name="secondary_text_material_dark">#ffffff</color>
     <color name="text_color_secondary">#ffffff</color>
+    <color name="rose">#af6d74</color>
+    <color name="blue_flower">#7288af</color>
+    <color name="medical_green">#6ea3a4</color>
+    <color name="nice_blue">#4785a5</color>
+    <color name="nice_blue_dark">#386e89</color>
+    <color name="da_purple">#aa5fb3</color>
+    <color name="da_green">#57b6bc</color>
 </resources>

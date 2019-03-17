@@ -12,7 +12,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="@android:dimen/app_icon_size"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/da_green">
 
         <!--android:textStyle="bold"-->
         <TextView
@@ -21,8 +21,8 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:text="Header 1"
-            android:textSize="16sp"
             android:textColor="@color/background"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,8 +35,8 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:text="Header 2"
-            android:textSize="16sp"
             android:textColor="@color/background"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/header1"
             app:layout_constraintTop_toTopOf="parent"
@@ -49,8 +49,8 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:text="Header 3"
-            android:textSize="16sp"
             android:textColor="@color/background"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/header2"
             app:layout_constraintTop_toTopOf="parent"
@@ -64,8 +64,8 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:text="Header 4"
-            android:textSize="16sp"
             android:textColor="@color/background"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/header3"
             app:layout_constraintRight_toRightOf="parent"

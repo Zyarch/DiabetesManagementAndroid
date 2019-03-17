@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyGlucose</string>
+    <string name="app_name">Diabetes Assistant</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -54,10 +54,10 @@
 
     <string name="pref_header_general">General</string>
     <string name="pref_title_hostname">Server Hostname</string>
-    <string name="pref_default_hostname">legendscomic.com</string>
+    <string name="pref_default_hostname">diabetes-dev.azurewebsites.net</string>
 
     <string name="pref_title_port">Server Port</string>
-    <string name="pref_default_port">22222</string>
+    <string name="pref_default_port">443</string>
 
     <string name="pref_title_glucose_units">Units of Measurement</string>
     <string-array name="pref_glucose_units_list_titles">
@@ -230,7 +230,7 @@
     <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="title_activity_exercise_entry">Exercise Entry</string>
     <string name="dash">-</string>
-    <string name="service_label">MyGlucose Step Tracker</string>
+    <string name="service_label">Diabetes Assistant Step Tracker</string>
     <string name="exercise_steps">Steps (if applicable)</string>
     <string name="empty_listview">You haven\'t logged any entries yet.</string>
     <string name="pref_title_show_notification">Show Notification</string>

@@ -112,10 +112,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:background="@android:color/holo_green_light"
-                android:text="@string/close"
                 android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:background="@color/nice_blue_dark"
+                android:text="@string/close" />
 
         </TableRow>
 

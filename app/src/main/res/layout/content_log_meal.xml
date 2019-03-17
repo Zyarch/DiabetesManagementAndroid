@@ -142,11 +142,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
+                        android:background="@color/nice_blue_dark"
+                        android:drawableEnd="@drawable/ic_save_white_24dp"
+                        android:drawableRight="@drawable/ic_save_white_24dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:drawableRight="@drawable/ic_save_white_24dp"
-                        android:drawableEnd="@drawable/ic_save_white_24dp"
-                        android:background="@android:color/holo_green_light"
                         android:text="@string/submit" />
 
                 </TableRow>
@@ -172,13 +172,13 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/da_green"
+                android:drawableEnd="@drawable/ic_last_page_white_24dp"
+                android:drawableRight="@drawable/ic_last_page_white_24dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:drawableRight="@drawable/ic_last_page_white_24dp"
-                android:drawableEnd="@drawable/ic_last_page_white_24dp"
-                android:background="@android:color/holo_blue_dark"
                 android:text="@string/view_latest_entry" />
 
             <Button
@@ -186,11 +186,11 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/da_purple"
+                android:drawableEnd="@drawable/ic_history_white_24dp"
+                android:drawableRight="@drawable/ic_history_white_24dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:drawableRight="@drawable/ic_history_white_24dp"
-                android:drawableEnd="@drawable/ic_history_white_24dp"
-                android:background="@android:color/holo_purple"
                 android:text="@string/view_entry_history" />
 
         </LinearLayout>

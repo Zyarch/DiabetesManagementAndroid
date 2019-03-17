@@ -122,7 +122,7 @@
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="0dp"
-                android:background="@android:color/holo_green_light"
+                android:background="@color/nice_blue_dark"
                 android:baselineAligned="false"
                 android:text="@string/close" />
 
